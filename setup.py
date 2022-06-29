@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 setup(name="vspc_tools",
       version="1.0",
@@ -6,5 +6,6 @@ setup(name="vspc_tools",
       author="Victor Sabiá Pereira Carpes",
       author_email="",
       url="",
-      install_requires=["to_precision @ git+https://bitbucket.org/william_rusnack/to-precision.git"]
+      install_requires=["to_precision @ git+https://bitbucket.org/william_rusnack/to-precision.git"],
+      packages=find_packages()
       )
