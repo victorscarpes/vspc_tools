@@ -1,4 +1,4 @@
-from setuptools import find_packages, setup
+from setuptools import find_packages, setup, find_packages
 
 setup(name="vspc_tools",
       version="1.0",
