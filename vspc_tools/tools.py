@@ -8,7 +8,7 @@ Dsecrição: Módulo com funções que eu utilizo o tempo inteiro.
 
 def eng_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
     """
-    Formata um valor numperico utilizando os prefixos do SI para as potências de 10, utilizando a quantidade de algarismos significativos e unidade especificada.
+    Formata um valor numérico utilizando os prefixos do SI para as potências de 10, utilizando a quantidade de algarismos significativos e unidade especificada.
 
     Argumentos:
         value: Valor a ser formatado.
@@ -38,7 +38,7 @@ def eng_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
 
 def sci_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
     """
-    Formata um valor numperico utilizando em notação científica, utilizando a quantidade de algarismos significativos e unidade especificada.
+    Formata um valor numérico utilizando em notação científica, utilizando a quantidade de algarismos significativos e unidade especificada.
 
     Argumentos:
         value: Valor a ser formatado.
