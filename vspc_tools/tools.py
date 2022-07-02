@@ -62,13 +62,15 @@ def sci_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
     string = string.replace('.E', 'E').replace('.', decimal)
     mantissa, exponent = string.split('E')
     simbs = ['-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    supers = ['⁻', '⁰', '', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
+    supers = ['⁻', '⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
     if exponent == '0':
-        return mantissa + unit
+        return mantissa + ' ' + unit
     else:
         for (simb, super) in zip(simbs, supers):
             exponent = exponent.replace(simb, super)
-    return mantissa + ' × 10' + exponent + ' ' + unit
+    result = mantissa + ' × 10' + exponent + ' ' + unit
+    result = result.replace('10¹', '10')
+    return result
 
 def eng_formatter(unit:str, precision:int, decimal:str=',') -> callable:
     """
@@ -107,3 +109,10 @@ def sci_formatter(unit:str, precision:int, decimal:str=',') -> callable:
     def func(x, pos=None):
         return sci_notation(x, unit, precision, decimal)
     return func
+
+if __name__=='__main__':
+    print(sci_notation(0.01, 'V', 3))
+    print(sci_notation(0.1, 'V', 3))
+    print(sci_notation(1, 'V', 3))
+    print(sci_notation(10, 'V', 3))
+    print(sci_notation(100, 'V', 3))
