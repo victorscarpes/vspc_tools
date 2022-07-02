@@ -36,6 +36,35 @@ def eng_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
         string = string.replace(exp, ' '+pref)
     return string + unit
 
+def eng_inv(string:str) -> float:
+    """
+    Converte uma string formatada em notação de engenharia para um valor numérico. 
+    
+    Argumentos:
+        string: String formatada. A string deve ser formatada utilizando apenas os prefixos do SI correspondentes às potências de 10 com expoente múltiplo de 3. Entre o valor numérico e a unidade é necessário um espaço. O separador decimal pode ser tanto ponto quanto vírgula. O prefixo micro (μ) deve ser digitado como 'u'.
+    
+    Retorno:
+        Valor numérico.
+    
+    Exemplos:
+        >>> eng_inv('356 mm')
+        0.356
+        >>> eng_inv('360 mV')
+        0.36
+        >>> eng_inv('1.20000 kHz')
+        1200.0
+    """
+
+    mantissa, unit = string.split(' ')
+    pref_dict = {'Y':24, 'Z':21, 'E':18, 'P':15, 'T':12, 'G':9, 'M':6, 'k':3, 'm':-3, 'u':-6, 'n':-9, 'p':-12, 'f':-15, 'a':-18, 'z':-21, 'y':-24}
+    mantissa = mantissa.replace(',', '.')
+    if len(unit) == 1:
+        exponent = 0
+    else:
+        exponent = pref_dict[unit[0]]
+    return float(mantissa) * 10**exponent
+
+
 def sci_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
     """
     Formata um valor numérico utilizando em notação científica, utilizando a quantidade de algarismos significativos e unidade especificada.
@@ -110,9 +139,9 @@ def sci_formatter(unit:str, precision:int, decimal:str=',') -> callable:
         return sci_notation(x, unit, precision, decimal)
     return func
 
+
+
 if __name__=='__main__':
-    print(sci_notation(0.01, 'V', 3))
-    print(sci_notation(0.1, 'V', 3))
-    print(sci_notation(1, 'V', 3))
-    print(sci_notation(10, 'V', 3))
-    print(sci_notation(100, 'V', 3))
+    print(eng_inv('356 mm'))
+    print(eng_inv('45 uA'))
+    print(eng_inv('1.20000 kHz'))
