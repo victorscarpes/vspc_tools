@@ -6,15 +6,16 @@ Autor: Victor Sabiá Pereira Carpes
 Dsecrição: Módulo com funções que eu utilizo o tempo inteiro.
 """
 
-def eng_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
+def eng_notation(value:float, unit:str='', precision:int=3, decimal:str=',', format:bool=True) -> str:
     """
     Formata um valor numérico utilizando os prefixos do SI para as potências de 10, utilizando a quantidade de algarismos significativos e unidade especificada.
 
     Argumentos:
         value: Valor a ser formatado.
-        unit: Unidade a ser utilizada.
-        precision: Quantidade de algarismos significativos.
+        unit: Unidade a ser utilizada. Padrão: ''.
+        precision: Quantidade de algarismos significativos. Padrão: 3.
         decimal: Caracter utilizado para separar o número inteiro e o número decimal. Padrão: ','.
+        format: Flag que indica se o valor deve ser formatado ou não. Quando igual a False, a precisão equivale a casas depois da vírgula. Padrão: True.
     
     Retorno:
         String formatada.
@@ -28,6 +29,8 @@ def eng_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
         '1.20000 kHz'
     """
 
+    if format is not True:
+        return f"{value:.{precision}f} {unit}".replace('.', decimal)
     string = _eng_(value, precision, 'E')
     string = string.replace('.E', 'E').replace('.', decimal)
     exps = ['E24', 'E21', 'E18', 'E15', 'E12', 'E9', 'E6', 'E3', 'E0', 'E-3', 'E-6', 'E-9', 'E-12', 'E-15', 'E-18', 'E-21', 'E-24']
@@ -65,15 +68,16 @@ def eng_inv(string:str) -> float:
     return float(mantissa) * 10**exponent
 
 
-def sci_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
+def sci_notation(value:float, unit:str='', precision:int=3, decimal:str=',', format:bool=True) -> str:
     """
     Formata um valor numérico utilizando em notação científica, utilizando a quantidade de algarismos significativos e unidade especificada.
 
     Argumentos:
         value: Valor a ser formatado.
-        unit: Unidade a ser utilizada.
-        precision: Quantidade de algarismos significativos.
+        unit: Unidade a ser utilizada. Padrão: ''.
+        precision: Quantidade de algarismos significativos. Padrão: 3.
         decimal: Caracter utilizado para separar o número inteiro e o número decimal. Padrão: ','.
+        format: Flag que indica se o valor deve ser formatado ou não. Quando igual a False, a precisão equivale a casas depois da vírgula. Padrão: True.
     
     Retorno:
         String formatada.
@@ -87,6 +91,8 @@ def sci_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
         '1.20000 × 10³ Hz'
     """
 
+    if format is not True:
+        return f"{value:.{precision}f} {unit}".replace('.', decimal)
     string = _sci_(value, precision, 'E')
     string = string.replace('.E', 'E').replace('.', decimal)
     mantissa, exponent = string.split('E')
@@ -101,13 +107,15 @@ def sci_notation(value:float, unit:str, precision:int, decimal:str=',') -> str:
     result = result.replace('10¹', '10')
     return result
 
-def eng_formatter(unit:str, precision:int, decimal:str=',') -> callable:
+def eng_formatter(unit:str='', precision:int=3, decimal:str=',', format:bool=True) -> callable:
     """
     Cria uma função de formatação para o uso com o módulo matplotlib que formata os labels dos eixos utilizando a função eng_notation.
 
     Argumentos:
-        unit: Unidade a ser utilizada.
-        precision: Quantidade de algarismos significativos.
+        unit: Unidade a ser utilizada. Padrão: ''.
+        precision: Quantidade de algarismos significativos. Padrão: 3.
+        decimal: Caracter utilizado para separar o número inteiro e o número decimal. Padrão: ','.
+        format: Flag que indica se o valor deve ser formatado ou não. Quando igual a False, a precisão equivale a casas depois da vírgula. Padrão: True.
     
     Retorno:
         Função de formatação.
@@ -117,16 +125,18 @@ def eng_formatter(unit:str, precision:int, decimal:str=',') -> callable:
     """
 
     def func(x, pos=None):
-        return eng_notation(x, unit, precision, decimal)
+        return eng_notation(x, unit, precision, decimal, format)
     return func
 
-def sci_formatter(unit:str, precision:int, decimal:str=',') -> callable:
+def sci_formatter(unit:str='', precision:int=3, decimal:str=',', format:bool=True) -> callable:
     """
     Cria uma função de formatação para o uso com o módulo matplotlib que formata os labels dos eixos utilizando a função sci_notation.
 
     Argumentos:
-        unit: Unidade a ser utilizada.
-        precision: Quantidade de algarismos significativos.
+        unit: Unidade a ser utilizada. Padrão: ''.
+        precision: Quantidade de algarismos significativos. Padrão: 3.
+        decimal: Caracter utilizado para separar o número inteiro e o número decimal. Padrão: ','.
+        format: Flag que indica se o valor deve ser formatado ou não. Quando igual a False, a precisão equivale a casas depois da vírgula. Padrão: True.
     
     Retorno:
         Função de formatação.
@@ -136,12 +146,10 @@ def sci_formatter(unit:str, precision:int, decimal:str=',') -> callable:
     """
 
     def func(x, pos=None):
-        return sci_notation(x, unit, precision, decimal)
+        return sci_notation(x, unit, precision, decimal, format)
     return func
 
 
 
 if __name__=='__main__':
-    print(eng_inv('356 mm'))
-    print(eng_inv('45 uA'))
-    print(eng_inv('1.20000 kHz'))
+    print(eng_notation(0.356, 'V', 3, format=False))
