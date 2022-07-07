@@ -61,7 +61,7 @@ def eng_inv(string:str) -> float:
     mantissa, unit = string.split(' ')
     pref_dict = {'Y':24, 'Z':21, 'E':18, 'P':15, 'T':12, 'G':9, 'M':6, 'k':3, 'm':-3, 'u':-6, 'n':-9, 'p':-12, 'f':-15, 'a':-18, 'z':-21, 'y':-24}
     mantissa = mantissa.replace(',', '.')
-    if len(unit) == 1:
+    if len(unit) == 1 or unit[0] not in pref_dict:
         exponent = 0
     else:
         exponent = pref_dict[unit[0]]
