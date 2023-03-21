@@ -314,7 +314,7 @@ def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: s
         return "NaN"
 
     if value < 0:
-        return "-"+round_fix(value=abs(value, unit=unit, precision=precision, decimal=decimal))
+        return "-"+round_fix(value=abs(value), unit=unit, precision=precision, decimal=decimal)
 
     if mt.isinf(value):
         return "inf"+unit
