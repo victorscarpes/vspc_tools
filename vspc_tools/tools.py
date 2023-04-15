@@ -279,7 +279,7 @@ def round_sci(value: int | float, unit: str = '', precision: int = 3, decimal: s
         return whole + decimal + frac + " × 10" + sci_exp_str + unit
 
 
-def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: str = ',') -> str:
+def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: str = ',', unit_space: bool = True) -> str:
     """
     Formata um valor numérico em notação de ponto fixo, utilizando a quantidade de algarismos significativos e unidade especificada.
 
@@ -288,6 +288,7 @@ def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: s
         -unit (str, opcional): Unidade a ser utilizada. Padrão: ''.
         -precision (int, opcional): Quantidade de algarismos significativos. Padrão: 3.
         -decimal (str, opcional): Caracter utilizado para separar o número inteiro e o número decimal. Se o separador contiver números, utiliza o padrão. Padrão: ','.
+        -unit_space (bool): Flag para indicar se a unidade deve ser separada do valor numérico por um espaço. Padrão: True.
 
     Retorno:
         String formatada.
@@ -304,9 +305,6 @@ def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: s
     if any(char.isdecimal() for char in decimal):
         decimal = ","
 
-    if unit != "":
-        unit = " "+unit
-
     if precision == 0:
         return ""
 
@@ -314,10 +312,14 @@ def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: s
         return "NaN"
 
     if value < 0:
-        return "-"+round_fix(value=abs(value), unit=unit, precision=precision, decimal=decimal)
+        return "-"+round_fix(value=abs(value), unit=unit, precision=precision, decimal=decimal, unit_space=unit_space)
 
     if mt.isinf(value):
         return "inf"+unit
+
+    if unit != "":
+        if unit_space:
+            unit = " "+unit
 
     sci_str = round_sci(value=value, unit='', precision=precision, decimal=decimal)
 
@@ -386,7 +388,7 @@ def eng_formatter(unit: str = '', precision: int = 3, decimal: str = ',') -> cal
     return func
 
 
-def sci_formatter(unit: str = '', precision: int = 3, decimal: str = ',', format: bool = True) -> callable:
+def sci_formatter(unit: str = '', precision: int = 3, decimal: str = ',') -> callable:
     """
     Cria uma função de formatação para o uso com o módulo matplotlib que formata os labels dos eixos utilizando a função round_sci.
 
@@ -407,7 +409,7 @@ def sci_formatter(unit: str = '', precision: int = 3, decimal: str = ',', format
     return func
 
 
-def fix_formatter(unit: str = '', precision: int = 3, decimal: str = ',', format: bool = True) -> callable:
+def fix_formatter(unit: str = '', precision: int = 3, decimal: str = ',', unit_space: bool = True) -> callable:
     """
     Cria uma função de formatação para o uso com o módulo matplotlib que formata os labels dos eixos utilizando a função round_fix.
 
@@ -415,6 +417,7 @@ def fix_formatter(unit: str = '', precision: int = 3, decimal: str = ',', format
         -unit (str, opcional): Unidade a ser utilizada. Padrão: ''.
         -precision (int, opcional): Quantidade de algarismos significativos. Padrão: 3.
         -decimal (str, opcional): Caracter utilizado para separar o número inteiro e o número decimal. Se o separador contiver números, utiliza o padrão. Padrão: ','.
+        -unit_space (bool): Flag para indicar se a unidade deve ser separada do valor numérico por um espaço. Padrão: True.
 
     Retorno:
         Função de formatação.
@@ -424,7 +427,7 @@ def fix_formatter(unit: str = '', precision: int = 3, decimal: str = ',', format
     """
 
     def func(x, pos=None):
-        return round_fix(value=x, unit=unit, precision=precision, decimal=decimal)
+        return round_fix(value=x, unit=unit, precision=precision, decimal=decimal, unit_space=unit_space)
     return func
 
 
@@ -432,3 +435,5 @@ if __name__ == '__main__':
     print(round_eng(0.356, 'V', 3))
     print(round_sci(32000, 'Hz', 3, '.'))
     print(round_fix(0.32, 's', 3))
+    print(round_fix(32, '°', 2, unit_space=False))
+    print(round_fix(-32, '°', 2, unit_space=False))
