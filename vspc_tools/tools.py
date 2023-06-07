@@ -87,26 +87,18 @@ def round_eng(value: int | float, unit: str = '', precision: int = 3, decimal: s
         return ""
 
     if value < 0:
-        return "-"+round_eng(value=abs(value), unit=unit, precision=precision, decimal=decimal)
+        return f"-{round_eng(value=abs(value), unit=unit, precision=precision, decimal=decimal)}"
 
     if mt.isinf(value):
-        if unit == "":
-            return "inf"
-        else:
-            return "inf "+unit
-
+        return f"inf {unit}" if unit else "inf"
     if mt.isnan(value):
         return "NaN"
 
     if value == 0:
-        long_string = "0"+decimal+(precision-1)*"0"
+        long_string = f"0{decimal}" + (precision-1)*"0"
         if long_string[-1] == decimal:
             long_string = long_string[:-1]
-        if unit == "":
-            return long_string
-        else:
-            return long_string + " " + unit
-
+        return f"{long_string} {unit}" if unit else long_string
     si_exp = 3*mt.floor(mt.log10(value)/3)
     value_norm = value/(10**si_exp)
     whole, frac = str(value_norm).split(".")
@@ -126,7 +118,9 @@ def round_eng(value: int | float, unit: str = '', precision: int = 3, decimal: s
     if digit_after_trunc > 5:
         long_list[precision-1] += 1
     elif digit_after_trunc == 5:
-        if set(long_list[precision:]).intersection(set([1, 2, 3, 4, 5, 6, 7, 8, 9])):
+        if set(long_list[precision:]).intersection(
+            {1, 2, 3, 4, 5, 6, 7, 8, 9}
+        ):
             long_list[precision-1] += 1
         elif digit_before_trunc % 2 == 1:
             long_list[precision-1] += 1
@@ -194,22 +188,22 @@ def round_sci(value: int | float, unit: str = '', precision: int = 3, decimal: s
         decimal = ","
 
     if unit != "":
-        unit = " "+unit
+        unit = f" {unit}"
 
     if precision == 0:
         return ""
 
     if value < 0:
-        return "-"+round_sci(value=abs(value), unit=unit, precision=precision, decimal=decimal)
+        return f"-{round_sci(value=abs(value), unit=unit, precision=precision, decimal=decimal)}"
 
     if mt.isinf(value):
-        return "inf"+unit
+        return f"inf{unit}"
 
     if mt.isnan(value):
         return "NaN"
 
     if value == 0:
-        long_string = "0"+decimal+(precision-1)*"0"
+        long_string = f"0{decimal}" + (precision-1)*"0"
         if long_string[-1] == decimal:
             long_string = long_string[:-1]
         return long_string + unit
@@ -243,7 +237,9 @@ def round_sci(value: int | float, unit: str = '', precision: int = 3, decimal: s
     if digit_after_trunc > 5:
         long_list[precision-1] += 1
     elif digit_after_trunc == 5:
-        if set(long_list[precision:]).intersection(set([1, 2, 3, 4, 5, 6, 7, 8, 9])):
+        if set(long_list[precision:]).intersection(
+            {1, 2, 3, 4, 5, 6, 7, 8, 9}
+        ):
             long_list[precision-1] += 1
         elif digit_before_trunc % 2 == 1:
             long_list[precision-1] += 1
@@ -312,14 +308,13 @@ def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: s
         return "NaN"
 
     if value < 0:
-        return "-"+round_fix(value=abs(value), unit=unit, precision=precision, decimal=decimal, unit_space=unit_space)
+        return f"-{round_fix(value=abs(value), unit=unit, precision=precision, decimal=decimal, unit_space=unit_space)}"
 
     if mt.isinf(value):
-        return "inf"+unit
+        return f"inf{unit}"
 
-    if unit != "":
-        if unit_space:
-            unit = " "+unit
+    if unit_space and unit != "":
+        unit = f" {unit}"
 
     sci_str = round_sci(value=value, unit='', precision=precision, decimal=decimal)
 
@@ -341,21 +336,21 @@ def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: s
 
     while num_exp != 0:
         dot_index = long_str.index(decimal)
-        num_len = len(long_str)
-
         if num_exp > 0:
+            num_len = len(long_str)
+
             if dot_index == num_len-1:
-                long_str = long_str[:-1] + "0" + decimal
+                long_str = f"{long_str[:-1]}0{decimal}"
             else:
                 char_after_dot = long_str[dot_index+1]
                 long_str = long_str[:dot_index] + char_after_dot + decimal + long_str[dot_index+2:]
             num_exp -= 1
         else:
             if dot_index == 0:
-                long_str = decimal + "0" + long_str[1:]
+                long_str = f"{decimal}0{long_str[1:]}"
             elif dot_index == 1:
                 char_before_dot = long_str[0]
-                long_str = "0" + decimal + char_before_dot + long_str[2:]
+                long_str = f"0{decimal}{char_before_dot}{long_str[2:]}"
             else:
                 char_before_dot = long_str[dot_index-1]
                 long_str = long_str[:dot_index-2] + decimal + char_before_dot + long_str
