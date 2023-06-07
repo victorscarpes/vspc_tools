@@ -58,12 +58,12 @@ def eng_inv(string: str) -> float:
     return float(mantissa) * 10**exponent
 
 
-def round_eng(value: int | float, unit: str = '', precision: int = 3, decimal: str = ',') -> str:
+def round_eng(value: float, unit: str = '', precision: int = 3, decimal: str = ',') -> str:
     """
     Formata um valor numérico utilizando os prefixos do SI para as potências de 10, utilizando a quantidade de algarismos significativos e unidade especificada.
 
     Argumentos:
-        -value (int | float): Valor a ser formatado.
+        -value (float): Valor a ser formatado.
         -unit (str, opcional): Unidade a ser utilizada. Padrão: ''.
         -precision (int, opcional): Quantidade de algarismos significativos. Padrão: 3.
         -decimal (str, opcional): Caracter utilizado para separar o número inteiro e o número decimal. Se o separador contiver números, utiliza o padrão. Padrão: ','.
@@ -162,12 +162,12 @@ def round_eng(value: int | float, unit: str = '', precision: int = 3, decimal: s
     return long_string + _si_prefix[si_exp] + unit
 
 
-def round_sci(value: int | float, unit: str = '', precision: int = 3, decimal: str = ',') -> str:
+def round_sci(value: float, unit: str = '', precision: int = 3, decimal: str = ',') -> str:
     """
     Formata um valor numérico em notação científica, utilizando a quantidade de algarismos significativos e unidade especificada.
 
     Argumentos:
-        -value (int | float): Valor a ser formatado.
+        -value (float): Valor a ser formatado.
         -unit (str, opcional): Unidade a ser utilizada. Padrão: ''.
         -precision (int, opcional): Quantidade de algarismos significativos. Padrão: 3.
         -decimal (str, opcional): Caracter utilizado para separar o número inteiro e o número decimal. Se o separador contiver números, utiliza o padrão. Padrão: ','.
@@ -275,12 +275,12 @@ def round_sci(value: int | float, unit: str = '', precision: int = 3, decimal: s
         return whole + decimal + frac + " × 10" + sci_exp_str + unit
 
 
-def round_fix(value: int | float, unit: str = '', precision: int = 3, decimal: str = ',', unit_space: bool = True) -> str:
+def round_fix(value: float, unit: str = '', precision: int = 3, decimal: str = ',', unit_space: bool = True) -> str:
     """
     Formata um valor numérico em notação de ponto fixo, utilizando a quantidade de algarismos significativos e unidade especificada.
 
     Argumentos:
-        -value (int | float): Valor a ser formatado.
+        -value (float): Valor a ser formatado.
         -unit (str, opcional): Unidade a ser utilizada. Padrão: ''.
         -precision (int, opcional): Quantidade de algarismos significativos. Padrão: 3.
         -decimal (str, opcional): Caracter utilizado para separar o número inteiro e o número decimal. Se o separador contiver números, utiliza o padrão. Padrão: ','.
