@@ -94,6 +94,24 @@ def round_eng(value: float, unit: str = '', precision: int = 3, decimal: str = '
     if mt.isnan(value):
         return "NaN"
 
+    if mt.floor(mt.log10(value) / 3) >= 10:
+        return round_fix(
+            value=value * 1e-30,
+            unit=f"Q{unit}",
+            precision=precision,
+            decimal=decimal,
+            unit_space=True,
+        )
+
+    if mt.floor(mt.log10(value) / 3) <= -10:
+        return round_fix(
+            value=value * 1e30,
+            unit=f"q{unit}",
+            precision=precision,
+            decimal=decimal,
+            unit_space=True,
+        )
+
     if value == 0:
         long_string = f"0{decimal}" + (precision-1)*"0"
         if long_string[-1] == decimal:
@@ -428,6 +446,8 @@ def fix_formatter(unit: str = '', precision: int = 3, decimal: str = ',', unit_s
 
 if __name__ == '__main__':
     print(round_eng(0.356, 'V', 3))
+    print(round_eng(1e-31, 'V', 3))
+    print(round_eng(3.5e34, 'V', 3))
     print(round_sci(32000, 'Hz', 3, '.'))
     print(round_fix(0.32, 's', 3))
     print(round_fix(32, '°', 2, unit_space=False))
